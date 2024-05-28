@@ -1,10 +1,11 @@
 import secrets
-
+from DBController import DBController
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 import sqlite3
 import tempfile
 import os
+
 
 app = Flask(__name__)
 app.secret_key = secrets.token_bytes(16)
@@ -29,15 +30,9 @@ def upload_file():
         temp_file_path = os.path.join(temp_dir, file.filename)
         file.save(temp_file_path)
         session["file"] = temp_file_path
-        connection = sqlite3.connect(session["file"])
-        print(connection)
-        cursor = connection.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        mitarbeiter = cursor.fetchall()
-        print(mitarbeiter)
-        cursor.close()
-        connection.close()
-        os.remove(temp_file_path)
+        db=DBController(temp_file_path)
+        db.spaltenAusgeben()
+        #os.remove(temp_file_path)
     except Exception as e:
         print(e)
     return jsonify({"message": "Datei erfolgreich hochgeladen!"})
