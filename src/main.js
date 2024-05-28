@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 function Main() {
     const [datei, setDatei] = useState(null);
+    const [meldung, setMeldung]=useState(null)
 
     const sqlChange = (event) => {
         const file = event.target.files[0];
@@ -33,8 +34,10 @@ function Main() {
 
             const data = await response.json();
             console.log(data);
+            setMeldung("Erfolg")
         } catch (err) {
             console.log(err);
+            setMeldung("Fehler")
         }
     }
 
@@ -42,6 +45,7 @@ function Main() {
         <div>
             <input type="file" onChange={sqlChange} />
             <button onClick={abschicken}>Abschicken</button>
+            <p>{meldung}</p>
         </div>
     );
 }

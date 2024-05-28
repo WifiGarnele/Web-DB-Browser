@@ -2,7 +2,6 @@ import secrets
 from DBController import DBController
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
-import sqlite3
 import tempfile
 import os
 
@@ -33,9 +32,11 @@ def upload_file():
         db=DBController(temp_file_path)
         db.spaltenAusgeben()
         #os.remove(temp_file_path)
+        return jsonify({"message": "Datei erfolgreich hochgeladen!"})
     except Exception as e:
         print(e)
-    return jsonify({"message": "Datei erfolgreich hochgeladen!"})
+        return jsonify({"error": "Falscher daz Dateityp"}), 400
+
 
 
 if __name__ == '__main__':
