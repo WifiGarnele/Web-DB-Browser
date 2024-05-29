@@ -40,12 +40,28 @@ function Main() {
             setMeldung("Fehler")
         }
     }
+    function zuBearbeitung(){
+        window.location.href="/tabellen"
+    }
+
 
     return (
         <div>
             <input type="file" onChange={sqlChange} />
             <button onClick={abschicken}>Abschicken</button>
-            <p>{meldung}</p>
+
+            {
+                meldung==="Erfolg"?(
+                    <div>
+                        <p>{meldung}</p>
+                        <button onClick={zuBearbeitung}>zur Bearbeitung</button>
+                    </div>
+                ):(
+                    <div>
+                        <p>{meldung}</p>
+                    </div>
+                )
+            }
         </div>
     );
 }
