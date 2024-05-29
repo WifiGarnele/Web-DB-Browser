@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 function Tabellen(){
     const [tabellen, setTabellen]=useState([]);
     async function tabellenAusgeben(){
@@ -6,14 +6,30 @@ function Tabellen(){
             const response=await fetch('http://localhost:3002/tabellen');
             const data=await response.json();
             console.log(data);
+            setTabellen(data)
         }catch (err){
             console.log(err)
         }
     }
-    tabellenAusgeben()
+
+    useEffect(() => {
+        tabellenAusgeben()
+
+    }, []);
     return(
         <div>
-            <p>hallo</p>
+            {Object.keys(tabellen).map(key => (
+                <div>
+                <p>{key}</p>
+                    <div>
+                        {tabellen[key].map(spalte => (
+                            <div>{spalte}</div>
+                        ))
+
+                        }
+                    </div>
+                </div>
+                ))}
         </div>
     )
 }

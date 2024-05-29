@@ -1,17 +1,11 @@
-import secrets
-from datetime import timedelta
 from DBController import DBController
-from flask import Flask, jsonify, request, g
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-
 import tempfile
 import os
 app = Flask(__name__)
-
 CORS(app)
-
 datei=None
-
 
 @app.route("/upload", methods=["POST", "GET"])
 def upload_file():
@@ -37,12 +31,13 @@ def upload_file():
         db=DBController(datei)
 
         print(db.tabellenAusgeben())
+        db.schliessen()
         #os.remove(temp_file_path)
 
         return jsonify({"message": "Datei erfolgreich hochgeladen!"})
     except Exception as e:
         print(e)
-        return jsonify({"error": "Falscher daz Dateityp"}), 400
+        return jsonify({"error": "Falscher Dateityp"}), 400
 
 @app.route("/tabellen", methods=["GET"])
 def tabellenAusgeben():
@@ -53,12 +48,14 @@ def tabellenAusgeben():
         db = DBController(datei)
         tabellen = db.tabellenAusgeben()
         print(tabellen)
+        db.schliessen()
+
         return jsonify(tabellen)
+
     except Exception as e:
         print(e)
         print("Fehler beim Ausgeben der Tabellen")
         return jsonify({"error": "Fehler beim Ausgeben der Tabellen"}), 500
-
 
 
 if __name__ == '__main__':
