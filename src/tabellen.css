@@ -1,0 +1,25 @@
+.container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.table-container {
+    margin-bottom: 20px;
+}
+
+.table-header {
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.columns-container {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.column {
+    padding: 5px 0;
+}
