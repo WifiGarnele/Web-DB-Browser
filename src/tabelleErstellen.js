@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 function TabelleErstellen() {
     const [spalten, setSpalten] = useState([]);
     const [ausgewaehlteSpalte, setAusgewaehlteSpalte] = useState(null);
+    const [tabellenName, setTabellenName]=useState(null);
 
     const neueSpalte = () => {
         let vorherigerindex=0;
@@ -78,7 +79,7 @@ function TabelleErstellen() {
         setSpalten(spaltenKopie)
         console.log(spalten)
     }
-    function tabelleErstellen(){
+    async function tabelleErstellen(){
         if (spalten.length==0){
             window.alert("Fehler: Keine Spalten erstellt")
         }else {
@@ -100,9 +101,33 @@ function TabelleErstellen() {
                 if (PKCount==0){
                     window.alert("Fehler: Kein Primary Key")
                 }else{
-
+                    if (tabellenName==null){
+                        window.alert("Fehler: Kein Tabellennamen");
+                    }else {
+                         await senden()
+                        window.location.href="/tabellen";
+                    }
                 }
             }
+        }
+    }
+    async function senden(){
+        try {
+            console.log("start")
+            const response = await fetch('http://localhost:3002/neueTabelle', {
+                method: 'POST',
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({tabellenName: tabellenName, spalten: spalten}),
+
+            });
+            const data=await response.json();
+            console.log(data)
+
+        }catch (err){
+            console.log(err)
         }
     }
 
@@ -111,11 +136,11 @@ function TabelleErstellen() {
             <div id="button-container">
                 <button id="neueSpalte" onClick={neueSpalte}>Neue Spalte</button>
                 <button id="spalteEntfernen" onClick={spalteEntfernen}>Spalte entfernen</button>
-                <button>Tabelle erstellen</button>
+                <button onClick={tabelleErstellen}>Tabelle erstellen</button>
             </div>
             <div id="input-container">
                 <label htmlFor="tabellenNamen">Tabellenname: </label>
-                <input type="text" id="tabellenNamen" />
+                <input type="text" id="tabellenNamen" onChange={(e) => setTabellenName(e.target.value)}/>
             </div>
             <div id="spalten-container">
                 {spalten.map((spalte) => (

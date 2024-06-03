@@ -44,10 +44,10 @@ def tabellenAusgeben():
 
     try:
         global datei
-
+        print(datei)
         db = DBController(datei)
         tabellen = db.tabellenAusgeben()
-        print(tabellen)
+        #print(tabellen)
         db.schliessen()
 
         return jsonify(tabellen)
@@ -56,6 +56,17 @@ def tabellenAusgeben():
         print(e)
         print("Fehler beim Ausgeben der Tabellen")
         return jsonify({"error": "Fehler beim Ausgeben der Tabellen"}), 500
+
+@app.route("/neueTabelle", methods=["POST", "GET"])
+def tabelleErstellen():
+    req=request.get_json()
+    print("request")
+    print(req)
+    tabellenName=req.get("tabellenName")
+    print(tabellenName)
+    spalten=req.get("spalten")
+    print(spalten)
+    return jsonify({"message": "Erfolg!"})
 
 
 if __name__ == '__main__':

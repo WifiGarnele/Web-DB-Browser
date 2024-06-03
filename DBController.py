@@ -18,8 +18,8 @@ class DBController:
             self.cursor.execute(sql_string)
             spalten=self.cursor.fetchall()
             db_struktur[tabelle[0]]=spalten
-            print(spalten)
-            print(db_struktur)
+            #print(spalten)
+            #print(db_struktur)
         return db_struktur
 
     def schliessen(self):
