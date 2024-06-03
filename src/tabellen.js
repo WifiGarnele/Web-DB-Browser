@@ -35,7 +35,7 @@ function Tabellen(){
                         <div className="columns-container">
                             {tabellen[key].map((spalte, index) => (
                                 <div key={index} className="column">
-                                    {spalte[1]}
+                                    {spalte[1]} {"      "} {spalte[2]}
                                 </div>
                             ))}
                         </div>
