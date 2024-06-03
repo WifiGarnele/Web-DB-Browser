@@ -22,6 +22,32 @@ class DBController:
             #print(db_struktur)
         return db_struktur
 
+    def tabelleErstellen(self, req):
+        tabellenName=req.get("tabellenName")
+        print(tabellenName)
+        spalten=req.get("spalten")
+        print(spalten)
+        createBefehl=f"CREATE TABLE {tabellenName}("
+        spaltenBefehl=""
+        pk=[]
+        PKBefehl="PRIMARY KEY("
+        for spalte in spalten:
+            spaltenBefehl=spaltenBefehl+f"{spalte.get("name")} {spalte.get("typ")}, "
+            if (spalte.get("PK")==1):
+                pk.append(spalte)
+
+        for i in range (0,len(pk)):
+            PKBefehl = PKBefehl + f"{pk[i].get("name")}"
+            if (i<len(pk)-1):
+                PKBefehl=PKBefehl+","
+
+
+
+        createBefehl=createBefehl+" "+spaltenBefehl+""+PKBefehl+"));"
+        print(createBefehl)
+        self.cursor.execute(createBefehl)
+        self.connection.commit()
+
     def schliessen(self):
         self.cursor.close()
         self.connection.close()

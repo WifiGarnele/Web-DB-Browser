@@ -62,10 +62,8 @@ def tabelleErstellen():
     req=request.get_json()
     print("request")
     print(req)
-    tabellenName=req.get("tabellenName")
-    print(tabellenName)
-    spalten=req.get("spalten")
-    print(spalten)
+    db = DBController(datei)
+    db.tabelleErstellen(req)
     return jsonify({"message": "Erfolg!"})
 
 
