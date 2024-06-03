@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import './tabellen.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faKey } from '@fortawesome/free-solid-svg-icons';
 function Tabellen(){
     const [tabellen, setTabellen]=useState([]);
     const [openTables, setOpenTables] = useState({});
@@ -24,6 +26,9 @@ function Tabellen(){
             [key]: !prevState[key],
         }));
     };
+    const GoldKeyIcon = () => (
+        <FontAwesomeIcon icon={faKey} style={{ color: 'gold' }} />
+    );
     return (
         <div className="container">
             {Object.keys(tabellen).map((key) => (
@@ -34,10 +39,21 @@ function Tabellen(){
                     {openTables[key] && (
                         <div className="columns-container">
                             {tabellen[key].map((spalte, index) => (
-                                <div key={index} className="column">
-                                    {spalte[1]} {"      "} {spalte[2]}
-                                </div>
+                                <div>
+                            {spalte[5]==0?
+                                (
+                                    <div key={index} className="column">
+                                        {spalte[1]} {"      "} {spalte[2]}
+                                    </div>
+                                ):(
+                                    <div key={index} className="column">
+                                        {spalte[1]} {"      "} {spalte[2]} <GoldKeyIcon />
+                                    </div>
+                                )
+                            }
+                            </div>
                             ))}
+
                         </div>
                     )}
                 </div>
