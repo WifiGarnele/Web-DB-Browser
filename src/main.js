@@ -1,4 +1,4 @@
-// App.js
+
 
 import React, { useState } from 'react';
 
@@ -41,7 +41,9 @@ function Main() {
         }
     }
     function zuBearbeitung(){
-        window.location.href="/tabellen"
+        window.sessionStorage.setItem("bearbeitung", true)
+        window.location.href="/"
+
     }
 
 

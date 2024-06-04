@@ -1,5 +1,5 @@
 from DBController import DBController
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file, make_response
 from flask_cors import CORS
 import tempfile
 import os
@@ -32,7 +32,7 @@ def upload_file():
 
         print(db.tabellenAusgeben())
         db.schliessen()
-        #os.remove(temp_file_path)
+
 
         return jsonify({"message": "Datei erfolgreich hochgeladen!"})
     except Exception as e:
@@ -64,7 +64,24 @@ def tabelleErstellen():
     print(req)
     db = DBController(datei)
     db.tabelleErstellen(req)
+    db.schliessen()
     return jsonify({"message": "Erfolg!"})
+
+@app.route("/datei", methods=["GET"])
+def sendDatei():
+    print(datei)
+    return send_file(datei, as_attachment=True)
+
+
+@app.route("/dateiname", methods=["GET"])
+def sendDateiname():
+    global datei
+    datei=None
+    print(datei)
+    dateiname = os.path.basename(datei)
+    os.remove(datei)
+    return jsonify(dateiname)
+
 
 
 if __name__ == '__main__':
