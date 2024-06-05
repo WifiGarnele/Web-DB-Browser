@@ -17,6 +17,9 @@ function Navbar() {
                     <li className="nav-item">
                         <Link className="nav-link" to="/tabelleErstellen" >Tabelle erstellen</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/sql" >SQL</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

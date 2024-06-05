@@ -1,0 +1,28 @@
+.tabelle {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.tabelle table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabelle th,
+.tabelle td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.tabelle th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.tabelle .header {
+    text-align: left;
+}
+
+.tabelle .zelle {
+    text-align: left;
+}

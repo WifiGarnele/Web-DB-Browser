@@ -48,6 +48,20 @@ class DBController:
         self.cursor.execute(createBefehl)
         self.connection.commit()
 
+
+
+    def ausfuehren(self, query):
+        #self.connection.row_factory=sqlite3.Row
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        column_names = [description[0] for description in self.cursor.description]
+        print(column_names)
+        ergebnis=[]
+        for row in rows:
+            ergebnis.append({column_names[idx]: value for idx, value in enumerate(row)})
+        print(ergebnis)
+        return ergebnis
+
     def schliessen(self):
         self.cursor.close()
         self.connection.close()

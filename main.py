@@ -76,11 +76,23 @@ def sendDatei():
 @app.route("/dateiname", methods=["GET"])
 def sendDateiname():
     global datei
-    datei=None
+
     print(datei)
     dateiname = os.path.basename(datei)
     os.remove(datei)
+    datei = None
     return jsonify(dateiname)
+
+@app.route("/sql", methods=["POST", "GET"])
+def sqlAusfuehren():
+    req=request.get_json()
+
+    query=req.get("query")
+    db=DBController(datei)
+    ergebnis=db.ausfuehren(query)
+    print(ergebnis)
+    return jsonify({"ergebnis": ergebnis})
+
 
 
 
