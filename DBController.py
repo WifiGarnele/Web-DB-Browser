@@ -12,14 +12,33 @@ class DBController:
         tabellen=self.cursor.fetchall()
         db_struktur={}
 
+
         for tabelle in tabellen:
             sql_string=f"PRAGMA table_info({tabelle[0]})"
-            print(sql_string)
+            #print(sql_string)
             self.cursor.execute(sql_string)
             spalten=self.cursor.fetchall()
-            db_struktur[tabelle[0]]=spalten
             #print(spalten)
-            #print(db_struktur)
+
+
+            fk_string=f"PRAGMA foreign_key_list({tabelle[0]})"
+            self.cursor.execute(fk_string)
+            foreign_keys = self.cursor.fetchall()
+            for fk in foreign_keys:
+                for i in range(0, len(spalten)):
+                    if(spalten[i][1]==fk[3]):
+                        print("gleich")
+                        print(spalten[i][1])
+                        print(fk[3])
+                        if(spalten[i][5]==0):
+                            temp = list(spalten[i])
+                            temp[5] = -1
+                            spalten[i]=tuple(temp)
+
+
+            db_struktur[tabelle[0]] = spalten
+
+        print(db_struktur)
         return db_struktur
 
     def tabelleErstellen(self, req):

@@ -29,6 +29,9 @@ function Tabellen(){
     const GoldKeyIcon = () => (
         <FontAwesomeIcon icon={faKey} style={{ color: 'gold' }} />
     );
+    const GreyKeyIcon = () => (
+        <FontAwesomeIcon icon={faKey} style={{ color: 'grey' }} />
+    );
     return (
         <div className="container">
             {Object.keys(tabellen).map((key) => (
@@ -45,9 +48,13 @@ function Tabellen(){
                                     <div key={index} className="column">
                                         {spalte[1]} {"      "} {spalte[2]}
                                     </div>
-                                ):(
+                                ): spalte[5]>0?(
                                     <div key={index} className="column">
                                         {spalte[1]} {"      "} {spalte[2]} <GoldKeyIcon />
+                                    </div>
+                                ):(
+                                    <div key={index} className="column">
+                                        {spalte[1]} {"      "} {spalte[2]} <GreyKeyIcon />
                                     </div>
                                 )
                             }
