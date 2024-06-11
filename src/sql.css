@@ -43,3 +43,6 @@
 #button-container {
     margin-top: 10px; /* Adds some space between the textarea and the button */
 }
+.fehler-container{
+    color: red;
+}

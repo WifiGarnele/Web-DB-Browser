@@ -70,16 +70,20 @@ class DBController:
 
 
     def ausfuehren(self, query):
-        #self.connection.row_factory=sqlite3.Row
-        self.cursor.execute(query)
-        rows = self.cursor.fetchall()
-        column_names = [description[0] for description in self.cursor.description]
-        print(column_names)
-        ergebnis=[]
-        for row in rows:
-            ergebnis.append({column_names[idx]: value for idx, value in enumerate(row)})
-        print(ergebnis)
-        return ergebnis
+        try:
+            # self.connection.row_factory=sqlite3.Row
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()
+            column_names = [description[0] for description in self.cursor.description]
+            print(column_names)
+            ergebnis = []
+            for row in rows:
+                ergebnis.append({column_names[idx]: value for idx, value in enumerate(row)})
+            print(ergebnis)
+            return ergebnis
+        except Exception as e:
+            print(e.args)
+            return {"fehler":e.args[0]}
 
     def schliessen(self):
         self.cursor.close()

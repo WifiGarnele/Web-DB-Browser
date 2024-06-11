@@ -91,7 +91,11 @@ def sqlAusfuehren():
     db=DBController(datei)
     ergebnis=db.ausfuehren(query)
     print(ergebnis)
-    return jsonify({"ergebnis": ergebnis})
+    if isinstance(ergebnis, list):
+        return jsonify({"ergebnis": ergebnis})
+    else:
+        return jsonify(ergebnis)
+
 
 
 

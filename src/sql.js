@@ -5,6 +5,7 @@ function SQL(){
     const[query, setQuery]=useState(null)
     const[ergebnis, setErgebnis]=useState([])
     const [keys, setKeys]=useState([])
+    const [fehler, setFehler]=useState(null)
     async function ausfuehren(){
         if (query!=null){
             try {
@@ -19,15 +20,22 @@ function SQL(){
 
                 });
                 const data=await response.json();
-                setErgebnis(data.ergebnis)
-                let schluessel = [];
-                Object.keys(data.ergebnis[0]).forEach(key => {
-                    schluessel.push(key);
-                    console.log(key);
-                });
-
-                setKeys(schluessel)
                 console.log(data)
+                if(data.ergebnis==undefined){
+                    setFehler(data.fehler)
+                }else {
+                    setErgebnis(data.ergebnis)
+                    setFehler(null)
+                    let schluessel = [];
+                    Object.keys(data.ergebnis[0]).forEach(key => {
+                        schluessel.push(key);
+                        console.log(key);
+                    });
+                    setKeys(schluessel)
+                    console.log(data)
+                }
+
+
 
             }catch (err){
                 console.log(err)
@@ -45,7 +53,7 @@ function SQL(){
             </div>
             <div id="ergebnis-container">
                 <div className="tabelle">
-                    {ergebnis.length > 0 ? (
+                    {ergebnis.length > 0 && fehler==null? (
                         <table>
                             <thead>
                             <tr>
@@ -65,7 +73,9 @@ function SQL(){
                             </tbody>
                         </table>
                     ) : (
-                        <div>Keine Daten vorhanden.</div>
+                        <div className={"fehler-container"}>
+                            {fehler}
+                        </div>
                     )}
                 </div>
 
