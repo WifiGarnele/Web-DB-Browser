@@ -67,6 +67,8 @@ function TabelleErstellen() {
     }
     function setPK(index, event){
         event.preventDefault();
+
+
         let spaltenKopie=spalten
         for (let i=0; i<spaltenKopie.length;i++){
             if (spaltenKopie[i].index ==index){
@@ -158,8 +160,33 @@ function TabelleErstellen() {
                             <option value="BLOB">BLOB</option>
                             <option value="NUMERIC">NUMERIC</option>
                         </select>
-                        <label htmlFor="pk-input">PK:</label>
-                        <input type="checkbox" id="pk-input" name="pk" onClick={(event) => setPK(spalte.index, event)}/>
+                        <div>
+                            {spalte.PK==1?(
+                                <div>
+                                    <label htmlFor={`pk-input-${spalte.index}`}>PK:</label>
+                                    <input
+                                        className="check"
+                                        type="checkbox"
+                                        id={`pk-input-${spalte.index}`}
+                                        name="pk"
+                                        checked={true}
+                                        onChange={(event) => setPK(spalte.index, event)}
+                                    />
+                                </div>
+                            ):(
+                                <div>
+                                    <label htmlFor={`pk-input-${spalte.index}`}>PK:</label>
+                                    <input
+                                        className="check"
+                                        type="checkbox"
+                                        id={`pk-input-${spalte.index}`}
+                                        name="pk"
+                                        checked={false}
+                                        onChange={(event) => setPK(spalte.index, event)}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
