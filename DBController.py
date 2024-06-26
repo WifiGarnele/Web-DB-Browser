@@ -49,11 +49,17 @@ class DBController:
         createBefehl=f"CREATE TABLE {tabellenName}("
         spaltenBefehl=""
         pk=[]
+        fk=[]
         PKBefehl="PRIMARY KEY("
         for spalte in spalten:
             spaltenBefehl=spaltenBefehl+f"{spalte.get("name")} {spalte.get("typ")}, "
             if (spalte.get("PK")==1):
                 pk.append(spalte)
+            if (spalte.get("FKTabelle")!=None):
+                fk.append(spalte)
+        FKBefehl=""
+        for foreignKey in fk:
+            FKBefehl=FKBefehl+f"FOREIGN KEY('{foreignKey.get("name")}') REFERENCES '{foreignKey.get("FKTabelle")}'('{foreignKey.get("FKSpalte")}'),"
 
         for i in range (0,len(pk)):
             PKBefehl = PKBefehl + f"{pk[i].get("name")}"
@@ -62,7 +68,7 @@ class DBController:
 
 
 
-        createBefehl=createBefehl+" "+spaltenBefehl+""+PKBefehl+"));"
+        createBefehl=createBefehl+" "+spaltenBefehl+""+FKBefehl+""+PKBefehl+"));"
         print(createBefehl)
         self.cursor.execute(createBefehl)
         self.connection.commit()

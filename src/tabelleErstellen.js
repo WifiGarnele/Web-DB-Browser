@@ -1,27 +1,43 @@
 import React, { useState, useEffect } from "react";
 
 function TabelleErstellen() {
+    const [tabellen, setTabellen]=useState([]);
     const [spalten, setSpalten] = useState([]);
     const [ausgewaehlteSpalte, setAusgewaehlteSpalte] = useState(null);
     const [tabellenName, setTabellenName] = useState(null);
+
+    async function tabellenAusgeben(){
+        try{
+            const response=await fetch('http://localhost:3002/tabellen');
+            const data=await response.json();
+            console.log(data);
+            setTabellen(data)
+        }catch (err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        tabellenAusgeben()
+
+    }, []);
 
     const neueSpalte = () => {
         let vorherigerindex = 0;
         if (spalten.length > 0) {
             vorherigerindex = spalten[spalten.length - 1].index + 1;
         }
-        const neueAnzahl = [...spalten, { index: vorherigerindex, name: null, typ: null, PK: 0 }];
+        const neueAnzahl = [...spalten, { index: vorherigerindex, name: null, typ: null, PK: 0, FKTabelle: null, FKSpalte: null }];
         setSpalten(neueAnzahl);
     };
 
-    useEffect(() => {
-        console.log(spalten);
-    }, [spalten]);
+    console.log(spalten)
 
     function spalteSetzen(index, event) {
         event.preventDefault();
         setAusgewaehlteSpalte(index);
     }
+
 
     const spalteEntfernen = () => {
         if (ausgewaehlteSpalte !== null) {
@@ -39,6 +55,16 @@ function TabelleErstellen() {
     function setTyp(index, event, typ) {
         event.preventDefault();
         setSpalten(spalten.map(spalte => spalte.index === index ? { ...spalte, typ } : spalte));
+    }
+    function setFKTabelle(index, event, FKTabelle) {
+        event.preventDefault();
+        const FKSpalte=null
+        setSpalten(spalten.map(spalte => spalte.index === index ? { ...spalte, FKTabelle, FKSpalte } : spalte));
+
+    }
+    function setFKSpalte(index, event, FKSpalte) {
+        event.preventDefault();
+        setSpalten(spalten.map(spalte => spalte.index === index ? { ...spalte, FKSpalte } : spalte));
     }
 
     function setPK(index) {
@@ -70,8 +96,19 @@ function TabelleErstellen() {
                     if (tabellenName == null) {
                         window.alert("Fehler: Kein Tabellennamen");
                     } else {
-                        await senden();
-                        window.location.href = "/tabellen";
+                        let test2 =null;
+                        for (let i=0; i<spalten.length;i++){
+                            if (spalten[i].FKTabelle!=null&&spalten[i].FKSpalte==null){
+                                test2=spalten[i]
+                            }
+                        }
+                        if(test2!=null){
+                            window.alert("Fehler: Spalte des Foreign Keys fehlt")
+                        } else {
+                            await senden();
+                            window.location.href = "/tabellen";
+                        }
+
                     }
                 }
             }
@@ -122,6 +159,27 @@ function TabelleErstellen() {
                         </select>
                         <label htmlFor="pk-input">PK:</label>
                         <input type="checkbox" id="pk-input" name="pk" checked={spalte.PK === 1} onChange={() => setPK(spalte.index)} />
+                        <label htmlFor={"fk"}>FK (optional):</label>
+                        <select id={"fk"} autoComplete="on" required defaultValue="" onChange={(event) => setFKTabelle(spalte.index, event, event.target.value)}>
+                            <option value="" disabled hidden>Bitte auswählen</option>
+                            {
+                                Object.keys(tabellen).map(tabelle=>(
+                                    <option>{tabelle}</option>
+                                ))
+                            }
+                        </select>
+                        <select id={"fk-spalte"} autoComplete="on" required defaultValue="" onChange={(event) => setFKSpalte(spalte.index, event, event.target.value)}>
+                            <option value="" disabled hidden>Bitte auswählen</option>
+                            {
+                                spalte.FKTabelle!=null?(
+                                    tabellen[spalte.FKTabelle].map(fkSpalte=>(
+                                        <option>{fkSpalte[1]}</option>
+                                    ))
+                                ):(
+                                    <option>{null}</option>
+                                )
+                            }
+                        </select>
                     </div>
                 ))}
             </div>
